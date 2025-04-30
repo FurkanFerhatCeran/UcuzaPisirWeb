@@ -13,6 +13,7 @@ import RecipesPage from './pages/RecipesPage';
 import CategoryPage from './pages/CategoryPage';
 import RecipeDetailPage from './pages/RecipeDetailPage';
 import ShoppingListPage from './pages/ShoppingListPage';
+import ShoppingCategoryPage from './pages/ShoppingCategoryPage';
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
             <Route path="/category/:categoryId" element={<CategoryPage />} />
             <Route path="/recipes/:recipeId" element={<RecipeDetailPage />} />
             <Route path="/shopping-list" element={<ShoppingListPage />} />
+            <Route path="/shopping/:categoryId" element={<ShoppingCategoryPage />} />
             {/* Diğer sayfalar için Route'lar buraya eklenecek */}
           </Routes>
         </main>

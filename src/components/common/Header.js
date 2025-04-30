@@ -103,6 +103,13 @@ const MobileMenuButton = styled.button`
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')));
+
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    setUser(null);
+    window.location.href = '/';
+  };
   
   return (
     <HeaderContainer>
@@ -123,12 +130,25 @@ const Header = () => {
           <NavLink to="/about">Hakkımızda</NavLink>
           
           <AuthButtons>
-            <Button as={Link} to="/login" variant="outline">
-              Giriş Yap
-            </Button>
-            <Button as={Link} to="/register" variant="primary">
-              Kayıt Ol
-            </Button>
+            {user ? (
+              <>
+                <Button variant="outline" onClick={handleLogout}>
+                  Çıkış Yap
+                </Button>
+                <Button variant="primary" as={Link} to="/profile">
+                  {user.username}
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button as={Link} to="/login" variant="outline">
+                  Giriş Yap
+                </Button>
+                <Button as={Link} to="/register" variant="primary">
+                  Kayıt Ol
+                </Button>
+              </>
+            )}
           </AuthButtons>
         </NavLinks>
       </NavContainer>

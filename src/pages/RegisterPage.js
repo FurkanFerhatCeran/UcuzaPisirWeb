@@ -188,18 +188,40 @@ const RegisterPage = () => {
     });
   };
   
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     
-    // Burada kayıt işlemleri yapılacak
-    // API çağrısı, doğrulama vb.
-    
-    setTimeout(() => {
+    try {
+      if (formData.password !== formData.confirmPassword) {
+        throw new Error('Şifreler eşleşmiyor');
+      }
+
+      const response = await fetch('http://localhost:5000/api/users/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: `${formData.firstName} ${formData.lastName}`,
+          email: formData.email,
+          password: formData.password
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Kayıt işlemi başarısız oldu');
+      }
+
+      // Başarılı kayıt sonrası login sayfasına yönlendir
+      window.location.href = '/login';
+    } catch (error) {
+      alert(error.message);
+    } finally {
       setIsLoading(false);
-      // Başarılı kayıt sonrası yönlendirme
-      // history.push('/login');
-    }, 1500);
+    }
   };
   
   return (

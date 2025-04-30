@@ -153,18 +153,38 @@ const LoginPage = () => {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     
-    // Burada giriş işlemleri yapılacak
-    // API çağrısı, doğrulama vb.
-    
-    setTimeout(() => {
+    try {
+      const response = await fetch('http://localhost:5000/api/users/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          password
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Giriş işlemi başarısız oldu');
+      }
+
+      // Kullanıcı bilgilerini localStorage'a kaydet
+      localStorage.setItem('user', JSON.stringify(data));
+
+      // Ana sayfaya yönlendir
+      window.location.href = '/';
+    } catch (error) {
+      alert(error.message);
+    } finally {
       setIsLoading(false);
-      // Başarılı giriş sonrası yönlendirme
-      // history.push('/');
-    }, 1500);
+    }
   };
   
   return (

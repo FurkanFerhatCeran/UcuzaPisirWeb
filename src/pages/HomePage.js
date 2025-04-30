@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { 
   FaSearch, FaUtensils, FaLeaf, FaClock, FaUsers, 
   FaShoppingCart, FaHeart, FaStar, FaFire, FaSave, 
-  FaBolt, FaMoneyBillWave, FaPercent, FaTrophy, FaAppleAlt
+  FaBolt, FaMoneyBillWave, FaPercent, FaTrophy, FaAppleAlt, FaArrowRight
 } from 'react-icons/fa';
 // Şimdilik diğer bileşenleri import etmeyi kaldıralım
 // import Hero from '../components/home/Hero';
@@ -766,6 +766,95 @@ const PromoButton = styled(Link)`
   }
 `;
 
+const ShoppingCategoriesSection = styled.section`
+  padding: 40px 0;
+  background-color: #f9f9f9;
+`;
+
+const ShoppingCategoriesGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 30px;
+  
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+`;
+
+const ShoppingCategoryCard = styled(Link)`
+  background-color: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  }
+`;
+
+const ShoppingCategoryImage = styled.div`
+  height: 200px;
+  background-image: url(${props => props.image});
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.5) 100%);
+  }
+`;
+
+const ShoppingCategoryTitle = styled.h3`
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  color: white;
+  font-size: 1.8rem;
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+`;
+
+const ShoppingCategoryContent = styled.div`
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+`;
+
+const ShoppingCategoryDescription = styled.p`
+  color: #666;
+  margin-bottom: 20px;
+  flex: 1;
+`;
+
+const ShoppingCategoryButton = styled.span`
+  align-self: flex-start;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #4CAF50;
+  font-weight: 600;
+  
+  svg {
+    transition: transform 0.3s ease;
+  }
+  
+  &:hover svg {
+    transform: translateX(5px);
+  }
+`;
+
 // HomePage bileşeni
 const HomePage = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -916,6 +1005,28 @@ const HomePage = () => {
       icon: '🔪',
       title: 'Malzeme Değişimi',
       text: 'Pahalı malzemeleri daha uygun fiyatlı alternatifleriyle değiştirin. Örneğin pahalı etler yerine daha ekonomik parçaları kullanın.'
+    }
+  ];
+  
+  // Örnek alışveriş kategorileri
+  const shoppingCategories = [
+    {
+      id: 'atistirmalik',
+      title: 'Atıştırmalık',
+      description: 'Lezzetli cipsler, çikolatalar ve atıştırmalıklar ile kendinizi şımartın. Her damak zevkine uygun seçeneklerle dolu.',
+      image: 'https://cdn.pixabay.com/photo/2016/11/29/04/31/chips-1867459_1280.jpg'
+    },
+    {
+      id: 'icecekler',
+      title: 'İçecekler',
+      description: 'Serinletici gazlı içeceklerden meyve sularına kadar geniş içecek çeşitlerimizle susuzluğunuzu giderin.',
+      image: 'https://cdn.pixabay.com/photo/2015/07/02/20/37/cup-829527_1280.jpg'
+    },
+    {
+      id: 'sutUrunleri',
+      title: 'Süt Ürünleri',
+      description: 'Taze süt, peynir, yoğurt ve diğer süt ürünleri ile sağlıklı beslenmeyi destekleyin.',
+      image: 'https://cdn.pixabay.com/photo/2017/07/05/15/41/milk-2474993_1280.jpg'
     }
   ];
   
@@ -1277,6 +1388,28 @@ const HomePage = () => {
       <Notification show={showNotification}>
         <FaShoppingCart style={{marginRight: '8px'}} /> {activeRecipe} için malzemeler alışveriş listesine eklendi! ✓
       </Notification>
+      
+      {/* Alışveriş Kategorileri Bölümü */}
+      <ShoppingCategoriesSection>
+        <div className="container">
+          <SectionTitle>Ekonomik Alışveriş</SectionTitle>
+          <ShoppingCategoriesGrid>
+            {shoppingCategories.map(category => (
+              <ShoppingCategoryCard key={category.id} to={`/shopping/${category.id}`}>
+                <ShoppingCategoryImage image={category.image}>
+                  <ShoppingCategoryTitle>{category.title}</ShoppingCategoryTitle>
+                </ShoppingCategoryImage>
+                <ShoppingCategoryContent>
+                  <ShoppingCategoryDescription>{category.description}</ShoppingCategoryDescription>
+                  <ShoppingCategoryButton>
+                    Alışverişe Başla <FaArrowRight />
+                  </ShoppingCategoryButton>
+                </ShoppingCategoryContent>
+              </ShoppingCategoryCard>
+            ))}
+          </ShoppingCategoriesGrid>
+        </div>
+      </ShoppingCategoriesSection>
     </HomeContainer>
   );
 };
